@@ -1,0 +1,19 @@
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+#name h1 {
+    text-align: center;
+}
+
+#play-container {
+    border: solid;
+    width: 700px;
+    height: 700px;
+}
+
+main {
+    padding-top: 5%;
+    display: flex;
+    justify-content: center;
+}
