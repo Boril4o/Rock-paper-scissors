@@ -10,7 +10,7 @@ export class MoveableElement {
 
         this.element = document.createElement("p")
 
-        this.element.innerText = "🪨"
+        this.element.innerText = this.emoji
         this.element.style.position = "absolute"
         this.element.style.left = `${this.x}px`
         this.element.style.top = `${this.y}px`
