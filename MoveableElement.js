@@ -17,6 +17,11 @@ export class MoveableElement {
         this.element.style.right = "auto"
         this.element.style.bottom = "auto"
         this.element.style.margin = `${0}px`
+        this.element.style.fontSize = "35px"
+
+        const boundaries = this.element.getBoundingClientRect()
+        this.width = boundaries.width
+        this.height = boundaries.height
 
         return this.element
     }

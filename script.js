@@ -1,8 +1,14 @@
-import { MoveableElement } from "./MoveableElement.js"
-import { isOutOfBoundaries, resolveWallCollision, resolveObjectsColision, getRandomFloat } from "./helperFunctions.js"
-import { RockElement } from "./rockElement.js"
-import { PaperElement } from "./paperElement.js"
-import { ScissorsElement } from "./scissorsElement.js"
+import { resolveWallCollision, resolveObjectsColision, getMovableElements, getCounts, placeMovableElements1} from "./helperFunctions.js"
+
+const minSpeed = 50
+const maxSpeed = 100
+const spawnAmount = 10
+
+const rules = {
+    rock: 'scissor',
+    paper: 'rock',
+    scissor: 'paper'
+}
 
 const gameContainer = document.getElementById("play-container")
 const mainContainer = document.getElementsByTagName("main")[0]
@@ -12,45 +18,69 @@ const gameContainerBounderies = gameContainer.getBoundingClientRect()
 const minPosition = [gameContainerBounderies.left, gameContainerBounderies.top]
 const containerBottomRightBoundaries = [gameContainerBounderies.bottom, gameContainerBounderies.right]
 
-const moveableElements = []
-mainContainer.appendChild(test.createElement([minPosition[0] + window.scrollX, minPosition[1] + window.scrollY]))
-mainContainer.appendChild(test1.createElement([minPosition[0] * 2 + window.scrollX, minPosition[1] + window.scrollY]))
-
-for (let i = 0; i < 10; i++) {
-    const rockElement = new RockElement(getRandomFloat(200, 300), getRandomFloat(200, 300))
-
-    moveableElements.push(rockElement)
-
-
-}
+const moveableElements = getMovableElements(minSpeed, maxSpeed, spawnAmount)
+placeMovableElements1(moveableElements, mainContainer, spawnAmount, minPosition, containerBottomRightBoundaries)
 
 let lastAnim = undefined
 
-//requestAnimationFrame(runSimulation)
+requestAnimationFrame(runSimulation)
 
 function runSimulation(time) {
     if (!lastAnim) {
         lastAnim = time
     }
 
-    for (const me of a) {
+    for (const me of moveableElements) {
         let x = me.x + me.vx * ((time - lastAnim) / 1000)
         let y = me.y + me.vy * ((time - lastAnim) / 1000)
     
-        if (isOutOfBoundaries(me, minPosition, containerBottomRightBoundaries)) {
-            [x, y] = resolveWallCollision(me, [x, y], minPosition, containerBottomRightBoundaries)
-        }
+        const resolvedWallCollision = resolveWallCollision(me, [x, y], minPosition, containerBottomRightBoundaries)
     
-        me.changePosition([x, y])
+        me.changePosition(resolvedWallCollision)
     }
 
-    for (let i = 0; i < a.length; i++) {
-        for (let j = i + 1; j < a.length; j++) {
-            resolveObjectsColision(a[i], a[j])
+    for (let i = 0; i < moveableElements.length; i++) {
+        for (let j = i + 1; j < moveableElements.length; j++) {
+            const me1 = moveableElements[i]
+            const me2 = moveableElements[j]
+            const anyColisionResolved = resolveObjectsColision(me1, me2)
+
+            if (anyColisionResolved) {
+                if (rules[me1.type] === me2.type) {
+                    console.log("win")
+                    me2.type = me1.type
+                    me2.emoji = me1.emoji
+                    me2.element.innerText = me1.emoji
+                }
+                else if (rules[me2.type] === me1.type) {
+                    console.log("win")
+                    me1.type = me2.type;
+                    me1.emoji = me2.emoji
+                    me1.element.innerText = me2.emoji;
+                }
+            }
         }
     }
 
-    lastAnim = time
-    requestAnimationFrame(runSimulation)
-}
+    const counts = getCounts(moveableElements)
+    let isWinner = false
 
+    if (counts.rock === spawnAmount * 3) {
+        alert("ROCK WINS!");
+        isWinner = true
+    }
+    else if (counts.paper === spawnAmount * 3) {
+        alert("PAPER WINS!");
+        isWinner = true
+    }
+    else if (counts.scissor === spawnAmount * 3) {
+        alert("SCISSOR WINS!");
+        isWinner = true
+    }
+
+    if (!isWinner) {
+        lastAnim = time
+        requestAnimationFrame(runSimulation)
+    }
+    
+}

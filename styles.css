@@ -1,19 +1,120 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: "Roboto", sans-serif;
+    background-color: #1e293b; /* Dark Slate Blue Background */
+    color: #e2e8f0; /* Light Text */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Header Styling (formerly Footer) --- */
+#name {
+    padding: 1.5rem;
+    background: #0f172a; /* Darker header */
+    border-bottom: 1px solid #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 #name h1 {
     text-align: center;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: #cbd5e1;
+    font-size: 1.8rem;
+    text-transform: uppercase;
 }
 
-#play-container {
-    border: solid;
-    width: 700px;
-    height: 700px;
-}
-
+/* --- Main Layout --- */
 main {
-    padding-top: 5%;
+    flex: 1; /* Takes up remaining space */
     display: flex;
     justify-content: center;
+    align-items: center; /* Vertically center the game */
+    gap: 40px;
+    padding: 20px;
+}
+
+/* --- The Game Arena --- */
+#play-container {
+    position: relative; /* Crucial for absolute positioning of particles */
+    width: 700px;
+    height: 700px;
+    background-color: #f8fafc; /* Clean white/grey canvas for emojis */
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 
+                0 8px 10px -6px rgba(0, 0, 0, 0.5); /* Deep shadow to make it pop */
+    border: 4px solid #334155; /* Subtle border */
+    overflow: hidden; /* Keeps particles from spilling out */
+}
+
+/* Optional: Style the emojis inside the container if they are divs */
+#play-container div {
+    cursor: default;
+    user-select: none;
+    /* Smooth movement if you aren't updating every frame, 
+       but since you use requestAnimationFrame, this isn't strictly needed */
+}
+
+/* --- Control Panel (Dashboard) --- */
+.game-options {
+    background-color: #0f172a;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #334155;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 280px;
+}
+
+/* --- Form Elements --- */
+.game-options section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.game-options section label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #94a3b8; /* Muted label color */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.game-options section input {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.game-options section input:focus {
+    border-color: #6366f1; /* Indigo focus color */
+}
+
+/* --- Start Button --- */
+.start-game-but {
+    margin-top: 10px;
+    height: 55px;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); /* Gradient Button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.4);
+    transition: transform 0.1s, box-shadow 0.1s;
 }
