@@ -2,7 +2,14 @@ import { RockElement } from "./rockElement.js"
 import { PaperElement } from "./paperElement.js"
 import { ScissorsElement } from "./scissorsElement.js"
 
+/*
+    Check if elements is out of the boundaries
+    Element is out of boundaries if any of these are true x < x_min; x > x_max; y < y_min; y > y_max
+    When there is collison we change the velocity of moving to the opposite directon
+    and teleport it slightly toward inside
+*/
 export function resolveWallCollision(movableElement, newPosition, minPosition, containerBottomRight) {
+    //the max positon the element can be at
     const maxPosition = [containerBottomRight[1] - movableElement.width,
     containerBottomRight[0] - movableElement.height]
 
@@ -34,14 +41,17 @@ export function resolveWallCollision(movableElement, newPosition, minPosition, c
     return resolvedPosition
 }
 
+//Resolves collison between two elements
 export function resolveObjectsColision(me1, me2) {
     let anyCollisionResolved = false
 
+    //center for both elements
     const center1X = me1.x + me1.width / 2;
     const center1Y = me1.y + me1.height / 2;
     const center2X = me2.x + me2.width / 2;
     const center2Y = me2.y + me2.height / 2;
 
+    //delta between the two centers
     const dx = center1X - center2X;
     const dy = center1Y - center2Y;
 
@@ -91,6 +101,7 @@ export function getRandomFloat(min, max) {
     return Math.random() * (max - min) + min;
 }
 
+//create movable object for each type for spawnAmount of times. Also sort them by rocks, papers, scissors
 export function getMovableElements(minSpeed, maxSpeed, spawnAmount) {
     const moveableElements = []
 
@@ -117,6 +128,7 @@ export function getMovableElements(minSpeed, maxSpeed, spawnAmount) {
     return moveableElements
 }
 
+//Place elements with each type of its own at one of the corners
 export function placeMovableElements(moveableElements, container, spawnAmount, minPosition, containerBottomRight) {
     const defaultWidth = 48.063
     const defaultHeight = 47
@@ -139,6 +151,7 @@ export function placeMovableElements(moveableElements, container, spawnAmount, m
     }
 }
 
+//Old function for placing elements
 export function placeMovableElements1(moveableElements, container, spawnAmount, minPosition, containerBottomRight) {
     const defaultWidth = 48.063
     const defaultHeight = 47
@@ -201,6 +214,7 @@ export function placeMovableElements1(moveableElements, container, spawnAmount, 
     }
 }
 
+//get count for each elements type
 export function getCounts(elements) {
     const rock = elements.filter(e => e.type === 'rock').length;
     const paper = elements.filter(e => e.type === 'paper').length;

@@ -1,3 +1,4 @@
+//Base class for all moveable elements 
 export class MoveableElement {
     constructor(initialVX, initialVY) {
         this.vx = initialVX
